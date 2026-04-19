@@ -40,10 +40,27 @@ def savenow():
     content = asksaveasfile(defaultextension=".txt")
     print(myAddressBook,file=content)
 
+def opennow(): 
+    global myAddressBook 
+    content = askopenfile(title="Open file")
+    myAddressBook = eval(content.read())
+    for key in myAddressBook.keys():
+        listbox.insert(END,key)
+
+def showinfo(event):
+    index = listbox.curselection()
+    name = listbox.get(index)
+    details = myAddressBook[name]
+    detail1 = "Name: "+name+"\n"+"Address: "+details[0]+"\n"+"Mobile: "+details[1]+"\n"+"Email: "+details[2]+"\n"+"Birthday: "+details[3]
+    new_window = Toplevel(gui)
+    showlbl = Label (new_window, text=detail1, font=("Georgia", 14))
+    showlbl.pack()
+    
+
 
 intro = Label(text="My Address Book", font=("Georgia", 16))
 intro.pack()
-open = Button(text = "Open", font = ("Georgia", 16),)
+open = Button(text = "Open", font = ("Georgia", 16),command=opennow)
 open.pack()
 
 box = Frame(gui)
@@ -75,8 +92,10 @@ birthdaylbl.grid(row=4,column=0)
 birthday = Entry(box,fg ="black", bg = "white")
 birthday.grid(row=4,column=1,pady=3)
 
+
 listbox = Listbox(width=50,fg="black",bg="white",)
 listbox.place(x=30,y=70)
+listbox.bind("<<ListboxSelect>>",showinfo)
 
 edit = Button(text = "Edit", font = ("Georgia", 14),command=edits)
 edit.place(x=30,y=250)
